@@ -1,6 +1,7 @@
 import { FavoriteBorderOutlined, SearchOutlined, ShoppingCartOutlined } from '@material-ui/icons';
 import styled from 'styled-components';
 
+//Todo- better responsiveness for tablet size
 // Info div is hidden until hover
 const Info = styled.div`
 	opacity: 0;
@@ -21,7 +22,7 @@ const Info = styled.div`
 const Container = styled.div`
 	flex: 1;
 	margin: 5px;
-	min-width: 280px;
+	min-width: 350px;
 	height: 350px;
 	display: flex;
 	align-items: center;

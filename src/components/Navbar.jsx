@@ -3,6 +3,7 @@ import { Search, ShoppingCartOutlined } from '@material-ui/icons';
 import React from 'react';
 import styled from 'styled-components';
 import { mobile } from '../responsive';
+import { Link } from 'react-router-dom';
 
 // Todo align the mobile navbar better
 const Container = styled.div`
@@ -69,6 +70,10 @@ const MenuItem = styled.div`
 	${mobile({ fontSize: '0.5rem', marginLeft: '10px' })}
 `;
 
+const linkStyle = {
+	textDecoration: 'none',
+	color: 'black',
+};
 const Navbar = () => {
 	return (
 		<Container>
@@ -84,13 +89,19 @@ const Navbar = () => {
 					<Logo>KOTD.</Logo>
 				</Center>
 				<Right>
-					<MenuItem>SIGN UP</MenuItem>
-					<MenuItem>LOGIN</MenuItem>
-					<MenuItem>
-						<Badge variant='dot' color='primary'>
-							<ShoppingCartOutlined />
-						</Badge>
-					</MenuItem>
+					<Link style={linkStyle} to={'/register'}>
+						<MenuItem>SIGN UP</MenuItem>
+					</Link>
+					<Link style={linkStyle} to={'/login'}>
+						<MenuItem>LOGIN</MenuItem>
+					</Link>
+					<Link style={linkStyle} to={'/cart'}>
+						<MenuItem>
+							<Badge variant='dot' color='primary'>
+								<ShoppingCartOutlined />
+							</Badge>
+						</MenuItem>
+					</Link>
 				</Right>
 			</Wrapper>
 		</Container>

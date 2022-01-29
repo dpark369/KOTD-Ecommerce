@@ -37,6 +37,8 @@ const Select = styled.select`
 const Option = styled.option``;
 
 const ProductList = () => {
+	const location = useLocation();
+	console.log(location);
 	return (
 		<Container>
 			<Navbar />

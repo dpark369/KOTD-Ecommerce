@@ -27,23 +27,26 @@ export const categories = [
 		id: 1,
 		img: 'https://images.unsplash.com/photo-1618225747659-433d5a5c6af7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80',
 		title: 'Casual',
+		category: 'casual',
 	},
 	{
 		id: 2,
 		img: 'https://images.unsplash.com/photo-1563681438829-6e45d295180f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=847&q=80',
 		title: 'Performance',
+		category: 'performance',
 	},
 	{
 		id: 3,
 		img: 'https://images.unsplash.com/photo-1628263030387-fb2bf39f84bf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=915&q=80',
 		title: 'Custom Made',
+		category: 'custom',
 	},
 ];
 
 export const popularProducts = [
 	{
 		id: 1,
-		img: 'https://images.unsplash.com/photo-1631984564919-1f6b2313a71c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDF8fHNuZWFrZXJ8ZW58MHwyfDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60',
+		img: 'https://images.unsplash.com/photo-1631984564919-1f6b2313a71c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDF8fHNuZWFrZXJ8ZW58MHwyfDB8fA%3D%3D&auto=format&fit=crop&w=880&q=80',
 	},
 	{
 		id: 2,
@@ -63,14 +66,14 @@ export const popularProducts = [
 	},
 	{
 		id: 6,
-		img: 'https://images.unsplash.com/photo-1588099768512-be311242916f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80',
+		img: 'https://images.unsplash.com/photo-1518894781321-630e638d0742?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80',
 	},
 	{
 		id: 7,
-		img: 'https://images.unsplash.com/photo-1533680937690-d59ab2543468?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjJ8fHNuZWFrZXJ8ZW58MHwwfDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60',
+		img: 'https://images.unsplash.com/photo-1566824837278-216c7d60d391?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80',
 	},
 	{
 		id: 8,
-		img: 'https://images.unsplash.com/photo-1575537302964-96cd47c06b1b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTh8fHNuZWFrZXJ8ZW58MHwwfDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60',
+		img: 'https://images.pexels.com/photos/1464625/pexels-photo-1464625.jpeg?cs=srgb&dl=pexels-ray-piedra-1464625.jpg&fm=jpg',
 	},
 ];

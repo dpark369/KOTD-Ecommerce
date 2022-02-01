@@ -3,9 +3,13 @@ import styled from 'styled-components';
 import Announcement from '../components/Announcement';
 import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
-import Newsletter from '../components/Newsletter';
 import { mobile } from '../responsive';
-import { productData } from '../productData';
+import { useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { publicRequest } from '../requestMethods';
+import { addProduct } from '../redux/cartRedux';
+import { useDispatch } from 'react-redux';
+// Todo- Better error handling
 
 const Container = styled.div``;
 
@@ -22,7 +26,7 @@ const ImgContainer = styled.div`
 const Image = styled.img`
 	width: 100%;
 	height: 90vh;
-	object-fit: cover;
+	object-fit: contain;
 	${mobile({ height: '40vh' })}
 `;
 
@@ -109,47 +113,67 @@ const Button = styled.button`
 	}
 `;
 
+// Todo-Set initial Size to a Value
+
 const ProductPage = () => {
+	const location = useLocation();
+	const id = location.pathname.split('/')[2];
+	const [product, setProduct] = useState({});
+	const [size, setSize] = useState('');
+	const [quantity, setQuantity] = useState(1);
+	const dispatch = useDispatch();
+	useEffect(() => {
+		const getProduct = async () => {
+			try {
+				const res = await publicRequest.get(`/products/find/${id}`);
+				setProduct(res.data);
+			} catch {}
+		};
+		getProduct();
+	}, [id]);
+	const handleQuantity = (type) => {
+		if (type === 'inc') {
+			setQuantity(quantity + 1);
+		} else if (type === 'dec' && quantity > 1) {
+			setQuantity(quantity - 1);
+		}
+	};
+	const clickHandler = () => {
+		dispatch(addProduct({ ...product, quantity, size }));
+	};
+
 	return (
 		<Container>
 			<Navbar />
 			<Announcement />
 			<Wrapper>
 				<ImgContainer>
-					<Image src='https://images.unsplash.com/photo-1603787081207-362bcef7c144?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1965&q=80' />
+					<Image src={product.img} />
 				</ImgContainer>
 				<InfoContainer>
-					<Title>Air Jordan 1 Retro High OG 'Royal Toe'</Title>
-					<Desc>
-						"When the Air Jordan 1 arrived in '85, it was with rule-breaking bravado. The banned black-red colorway violated the league's
-						uniform policy and resulted in a $5,000 fine from the NBA each time Michael Jordan wore sneakers. Thus the legacy began.
-						Jordan's rookie campaign in 1984-85 finished with His Airness averaging 28.2 points per game to earn All-Star and Rookie of the
-						Year honors." --Flight Club
-					</Desc>
-					<Price>$ 350</Price>
+					<Title>{product.title}</Title>
+					<Desc>{product.desc}</Desc>
+					<Price>$ {product.price}</Price>
 					<FilterContainer>
 						<Filter>
 							<FilterTitle>Size</FilterTitle>
-							<FilterSize>
-								<FilterSizeOption>8</FilterSizeOption>
-								<FilterSizeOption>9</FilterSizeOption>
-								<FilterSizeOption>10</FilterSizeOption>
-								<FilterSizeOption>11</FilterSizeOption>
-								<FilterSizeOption>12</FilterSizeOption>
+							<FilterSize onChange={(e) => setSize(e.target.value)}>
+								{product.size?.map((size) => (
+									<FilterSizeOption key={size}>{size}</FilterSizeOption>
+								))}
 							</FilterSize>
 						</Filter>
 					</FilterContainer>
 					<AddContainer>
 						<AmountContainer>
-							<Remove />
-							<Amount>1</Amount>
-							<Add />
+							<Remove onClick={() => handleQuantity('dec')} />
+							<Amount>{quantity}</Amount>
+							<Add onClick={() => handleQuantity('inc')} />
 						</AmountContainer>
-						<Button>ADD TO CART</Button>
+						<Button onClick={clickHandler}>ADD TO CART</Button>
 					</AddContainer>
 				</InfoContainer>
 			</Wrapper>
-			<Newsletter />
 			<Footer />
 		</Container>
 	);

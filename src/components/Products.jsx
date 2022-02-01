@@ -1,5 +1,6 @@
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { popularProducts } from '../data';
+import axios from 'axios';
 import Product from './Product';
 
 const Container = styled.div`
@@ -9,12 +10,44 @@ const Container = styled.div`
 	justify-content: space-between;
 `;
 
-const Products = () => {
+// Todo - Change axios url
+const Products = ({ category, filters, sort }) => {
+	const [products, setProducts] = useState([]);
+	const [filteredProducts, setFilteredProducts] = useState([]);
+
+	//Get products from db
+	useEffect(() => {
+		const getProducts = async () => {
+			try {
+				const res = await axios.get(
+					category ? `http://localhost:5000/api/products?category=${category}` : 'http://localhost:5000/api/products'
+				);
+				setProducts(res.data);
+			} catch (err) {
+				console.log(err);
+			}
+		};
+		getProducts();
+	}, [category]);
+	// Filter products with the category and filters(size, color)
+	useEffect(() => {
+		if (category)
+			setFilteredProducts(products.filter((item) => Object.entries(filters).every(([key, value]) => item[key].includes(value))));
+	}, [products, category, filters]);
+	useEffect(() => {
+		if (sort === 'newest') {
+			setFilteredProducts((prevState) => [...prevState].sort((a, b) => a.createdAt - b.createdAt));
+		} else if (sort === 'asc') {
+			setFilteredProducts((prevState) => [...prevState].sort((a, b) => a.price - b.price));
+		} else {
+			setFilteredProducts((prevState) => [...prevState].sort((a, b) => b.price - a.price));
+		}
+	}, [sort]);
 	return (
 		<Container>
-			{popularProducts.map((item) => (
-				<Product item={item} key={item.id} />
-			))}
+			{category
+				? filteredProducts.map((item) => <Product item={item} key={item.id} />)
+				: products.slice(0, 8).map((item) => <Product item={item} key={item.id} />)}
 		</Container>
 	);
 };

@@ -4,6 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { mobile } from '../responsive';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 // Todo align the mobile navbar better
 const Container = styled.div`
@@ -23,12 +24,6 @@ const Left = styled.div`
 	flex: 1;
 	display: flex;
 	align-items: center;
-`;
-
-const Language = styled.span`
-	font-size: 14px;
-	cursor: pointer;
-	${mobile({ display: 'none' })}
 `;
 
 const SearchContainer = styled.div`
@@ -75,18 +70,20 @@ const linkStyle = {
 	color: 'black',
 };
 const Navbar = () => {
+	const quantity = useSelector((state) => state.cart.quantity);
 	return (
 		<Container>
 			<Wrapper>
 				<Left>
-					<Language>EN</Language>
 					<SearchContainer>
 						<Input placeholder='Search' />
 						<Search style={{ color: 'gray', fontSize: 16 }} />
 					</SearchContainer>
 				</Left>
 				<Center>
-					<Logo>KOTD.</Logo>
+					<Link style={linkStyle} to={'/'}>
+						<Logo>KOTD.</Logo>
+					</Link>
 				</Center>
 				<Right>
 					<Link style={linkStyle} to={'/register'}>
@@ -97,7 +94,7 @@ const Navbar = () => {
 					</Link>
 					<Link style={linkStyle} to={'/cart'}>
 						<MenuItem>
-							<Badge variant='dot' color='primary'>
+							<Badge badgeContent={quantity} color='primary'>
 								<ShoppingCartOutlined />
 							</Badge>
 						</MenuItem>

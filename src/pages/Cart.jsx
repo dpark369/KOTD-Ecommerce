@@ -1,9 +1,16 @@
 import { Add, Remove } from '@material-ui/icons';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Announcement from '../components/Announcement';
 import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
 import { mobile } from '../responsive';
+import { useEffect, useState } from 'react';
+import StripeCheckout from 'react-stripe-checkout';
+import { userRequest } from '../requestMethods';
+import { useNavigate } from 'react-router-dom';
+
+const KEY = 'pk_test_51KGTaMB9OLEYGkix3A7zD60i2EipGKxCmbJBG69a0JcmcnoF8ZelNxxWkiMGuuakSokcmausuQQH6ILY7BqOzPJQ00My3TeNOy';
 
 const Container = styled.div``;
 
@@ -79,13 +86,6 @@ const ProductName = styled.span``;
 
 const ProductId = styled.span``;
 
-const ProductColor = styled.div`
-	width: 20px;
-	height: 20px;
-	border-radius: 50%;
-	background-color: ${(props) => props.color};
-`;
-
 const ProductSize = styled.span``;
 
 const PriceDetail = styled.div`
@@ -119,7 +119,10 @@ const Hr = styled.hr`
 	border: none;
 	height: 1px;
 `;
-
+const Empty = styled.h1`
+	font: 3rem;
+	text-align: center;
+`;
 const Summary = styled.div`
 	flex: 1;
 	border: 0.5px solid lightgray;
@@ -152,7 +155,33 @@ const Button = styled.button`
 	font-weight: 600;
 `;
 
+// Todo- Fix navigate or upgrade the stripe
 const Cart = () => {
+	const cart = useSelector((state) => state.cart);
+	const [stripeToken, setStripeToken] = useState(null);
+	const navigate = useNavigate();
+
+	const onToken = (token) => {
+		setStripeToken(token);
+	};
+	useEffect(() => {
+		const makeRequest = async () => {
+			try {
+				const res = await userRequest.post('/checkout/payment', {
+					tokenId: stripeToken.id,
+					amount: cart.total,
+				});
+				console.log('before');
+				navigate('/success', {
+					stripeData: res.data,
+					products: cart,
+				});
+				console.log('after');
+			} catch {}
+		};
+		if (stripeToken) makeRequest();
+	}, [stripeToken, cart, navigate]);
+
 	return (
 		<Container>
 			<Navbar />
@@ -161,85 +190,77 @@ const Cart = () => {
 				<Title>YOUR BAG</Title>
 				<Top>
 					<TopButton>CONTINUE SHOPPING</TopButton>
+
 					<TopTexts>
-						<TopText>Shopping Bag(2)</TopText>
+						<TopText>Shopping Bag({cart.quantity})</TopText>
 						<TopText>Your Wishlist (0)</TopText>
 					</TopTexts>
 					<TopButton type='filled'>CHECKOUT NOW</TopButton>
 				</Top>
 				<Bottom>
 					<Info>
-						<Product>
-							<ProductDetail>
-								<Image src='https://images.unsplash.com/photo-1575537302964-96cd47c06b1b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80' />
-								<Details>
-									<ProductName>
-										<b>Product:</b> AIR JORDAN 12 GYM RED
-									</ProductName>
-									<ProductId>
-										<b>ID:</b> 93813718293
-									</ProductId>
-									<ProductColor color='red' />
-									<ProductSize>
-										<b>Size:</b> 9
-									</ProductSize>
-								</Details>
-							</ProductDetail>
-							<PriceDetail>
-								<ProductAmountContainer>
-									<Add />
-									<ProductAmount>1</ProductAmount>
-									<Remove />
-								</ProductAmountContainer>
-								<ProductPrice>$ 230</ProductPrice>
-							</PriceDetail>
-						</Product>
+						{cart.quantity !== 0 ? (
+							cart.products.map((product) => (
+								<Product>
+									<ProductDetail>
+										<Image src={product.img} />
+										<Details>
+											<ProductName>
+												<b>Product:</b> {product.title}
+											</ProductName>
+											<ProductId>
+												<b>ID:</b> {product._id}
+											</ProductId>
+											<ProductSize>
+												<b>Size:</b> {product.size}
+											</ProductSize>
+										</Details>
+									</ProductDetail>
+									<PriceDetail>
+										<ProductAmountContainer>
+											<Add />
+											<ProductAmount>{product.quantity}</ProductAmount>
+											<Remove />
+										</ProductAmountContainer>
+										<ProductPrice>$ {product.price * product.quantity}</ProductPrice>
+									</PriceDetail>
+								</Product>
+							))
+						) : (
+							<Empty>Empty Cart</Empty>
+						)}
 						<Hr />
-						<Product>
-							<ProductDetail>
-								<Image src='https://images.unsplash.com/photo-1533680937690-d59ab2543468?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1331&q=80' />
-								<Details>
-									<ProductName>
-										<b>Product:</b> Air Jordan 13 RETRO WHITE/TRUE RED-BLACK
-									</ProductName>
-									<ProductId>
-										<b>ID:</b> 93813718293
-									</ProductId>
-									<ProductColor color='grey' />
-									<ProductSize>
-										<b>Size:</b> 9
-									</ProductSize>
-								</Details>
-							</ProductDetail>
-							<PriceDetail>
-								<ProductAmountContainer>
-									<Add />
-									<ProductAmount>1</ProductAmount>
-									<Remove />
-								</ProductAmountContainer>
-								<ProductPrice>$ 220</ProductPrice>
-							</PriceDetail>
-						</Product>
 					</Info>
 					<Summary>
 						<SummaryTitle>ORDER SUMMARY</SummaryTitle>
 						<SummaryItem>
 							<SummaryItemText>Subtotal</SummaryItemText>
-							<SummaryItemPrice>$ 550</SummaryItemPrice>
+							<SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
 						</SummaryItem>
 						<SummaryItem>
 							<SummaryItemText>Estimated Shipping</SummaryItemText>
 							<SummaryItemPrice>$ 5.90</SummaryItemPrice>
 						</SummaryItem>
 						<SummaryItem>
-							<SummaryItemText>Shipping Discount</SummaryItemText>
-							<SummaryItemPrice>$ -5.90</SummaryItemPrice>
+							<SummaryItemText>Free Shipping Promotion</SummaryItemText>
+							<SummaryItemPrice>$ --5.90</SummaryItemPrice>
 						</SummaryItem>
 						<SummaryItem type='total'>
 							<SummaryItemText>Total</SummaryItemText>
-							<SummaryItemPrice>$ 550</SummaryItemPrice>
+							<SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
 						</SummaryItem>
-						<Button>CHECKOUT NOW</Button>
+						<StripeCheckout
+							name='KOTD.'
+							description={`Total : $ ${cart.total}. I do not actually sell shoes this is just a project website`}
+							image='https://avatars.githubusercontent.com/u/62682390?v=4'
+							billingAddress
+							shippingAddress
+							amount={cart.total * 100}
+							token={onToken}
+							stripeKey={KEY}
+						>
+							<Button>CHECKOUT NOW</Button>
+						</StripeCheckout>
 					</Summary>
 				</Bottom>
 			</Wrapper>

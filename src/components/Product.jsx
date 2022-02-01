@@ -1,4 +1,5 @@
 import { FavoriteBorderOutlined, SearchOutlined, ShoppingCartOutlined } from '@material-ui/icons';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 //Todo- better responsiveness for tablet size
@@ -20,7 +21,7 @@ const Info = styled.div`
 `;
 
 const Container = styled.div`
-	flex: 1;
+	flex: 1 0 21%;
 	margin: 5px;
 	min-width: 350px;
 	height: 350px;
@@ -36,7 +37,7 @@ const Container = styled.div`
 `;
 
 const Image = styled.img`
-	height: 75%;
+	height: 80%;
 	z-index: 2;
 `;
 
@@ -51,10 +52,15 @@ const Icon = styled.div`
 	margin: 10px;
 	transition: all 0.5s ease;
 	&:hover {
-		background-color: #e9f5f5;
-		transform: scale(1.1);
+		background-color: #7ac4ad;
+		transform: scale(1.2);
 	}
 `;
+
+const linkStyle = {
+	textDecoration: 'none',
+	color: 'black',
+};
 
 const Product = ({ item }) => {
 	return (
@@ -65,7 +71,9 @@ const Product = ({ item }) => {
 					<ShoppingCartOutlined />
 				</Icon>
 				<Icon>
-					<SearchOutlined />
+					<Link style={linkStyle} to={`/product/${item._id}`}>
+						<SearchOutlined />
+					</Link>
 				</Icon>
 				<Icon>
 					<FavoriteBorderOutlined />

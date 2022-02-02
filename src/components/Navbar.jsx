@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 // Todo align the mobile navbar better
+// Todo Make logout button work
+
 const Container = styled.div`
 	height: 60px;
 	${mobile({ height: '50px' })}
@@ -30,7 +32,6 @@ const SearchContainer = styled.div`
 	border: 0.5px solid lightgray;
 	display: flex;
 	align-items: center;
-	margin-left: 25px;
 	padding: 5px;
 	${mobile({ marginLeft: '5px' })}
 `;
@@ -61,6 +62,7 @@ const Right = styled.div`
 const MenuItem = styled.div`
 	font-size: 14px;
 	cursor: pointer;
+	text-align: center;
 	margin-left: 25px;
 	${mobile({ fontSize: '0.5rem', marginLeft: '10px' })}
 `;
@@ -71,6 +73,7 @@ const linkStyle = {
 };
 const Navbar = () => {
 	const quantity = useSelector((state) => state.cart.quantity);
+	const user = useSelector((state) => state.user);
 	return (
 		<Container>
 			<Wrapper>
@@ -86,12 +89,26 @@ const Navbar = () => {
 					</Link>
 				</Center>
 				<Right>
-					<Link style={linkStyle} to={'/register'}>
-						<MenuItem>SIGN UP</MenuItem>
-					</Link>
-					<Link style={linkStyle} to={'/login'}>
-						<MenuItem>LOGIN</MenuItem>
-					</Link>
+					{user.currentUser ? (
+						<div>
+							<Link style={linkStyle} to={'/account'}>
+								<MenuItem>ACCOUNT</MenuItem>
+							</Link>
+							<Link style={linkStyle} to={'/login'}>
+								<MenuItem>LOG OUT</MenuItem>
+							</Link>
+						</div>
+					) : (
+						<div>
+							<Link style={linkStyle} to={'/register'}>
+								<MenuItem>SIGN UP</MenuItem>
+							</Link>
+							<Link style={linkStyle} to={'/login'}>
+								<MenuItem>LOGIN</MenuItem>
+							</Link>
+						</div>
+					)}
+
 					<Link style={linkStyle} to={'/cart'}>
 						<MenuItem>
 							<Badge badgeContent={quantity} color='primary'>

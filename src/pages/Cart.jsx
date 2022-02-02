@@ -171,15 +171,10 @@ const Cart = () => {
 					tokenId: stripeToken.id,
 					amount: cart.total,
 				});
-				console.log('before');
-				navigate('/success', {
-					stripeData: res.data,
-					products: cart,
-				});
-				console.log('after');
+				// navigate('/success', { replace: true, state: { stripeData: res.data, products: cart } });
 			} catch {}
 		};
-		if (stripeToken) makeRequest();
+		if (stripeToken) makeRequest().then(navigate('/success'));
 	}, [stripeToken, cart, navigate]);
 
 	return (
@@ -251,7 +246,7 @@ const Cart = () => {
 						</SummaryItem>
 						<StripeCheckout
 							name='KOTD.'
-							description={`Total : $ ${cart.total}. I do not actually sell shoes this is just a project website`}
+							description={`Total : $ ${cart.total}. Fake Website`}
 							image='https://avatars.githubusercontent.com/u/62682390?v=4'
 							billingAddress
 							shippingAddress

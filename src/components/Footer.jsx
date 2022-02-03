@@ -84,7 +84,10 @@ const Footer = () => {
 		<Container>
 			<Left>
 				<Logo>KOTD.</Logo>
-				<Desc>This is a project website by Daniel Park. I used React.js for the frontend.</Desc>
+				<Desc>
+					This is a project ecommerce website by Daniel Park. I used React.js for the frontend and Node.js, Express and MongoDB for the
+					backend. I haven't finished some of the functionalities.
+				</Desc>
 				<SocialContainer>
 					<SocialIcon>
 						<Link href='https://github.com/dpark369'>
